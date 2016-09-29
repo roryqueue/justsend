@@ -53,6 +53,10 @@ defmodule Justsend do
   end
 
 
+  defp preferentially_match(recipient, match_func) when is_function(match_func) do
+    preferentially_match(recipient, [match_func])
+  end
+
   defp preferentially_match(_recipient, []), do: nil
 
   defp preferentially_match(recipient, [ match_func | tail ]) do

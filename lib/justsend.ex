@@ -2,7 +2,6 @@
 defmodule Justsend do
   @moduledoc """
   """
-
   @message_selectors []
   @medium_selectors []
   @renderers %{}
@@ -35,7 +34,7 @@ defmodule Justsend do
     message = render_message(recipient, message)
 
     if not Map.get(message, :channels) do
-      Map.put(message, :channels, preferentially_match(recipient, @medium_selectors))      
+      Map.put(message, :channels, select_medium(recipient))      
     end
   end
 
@@ -44,9 +43,15 @@ defmodule Justsend do
     nil
   end
 
+
   def select_message(recipient) do
     preferentially_match(recipient, @message_selectors)
   end
+
+  def select_medium(recipient) do
+    preferentially_match(recipient, @medium_selectors)
+  end
+
 
   defp preferentially_match(_recipient, []), do: nil
 
@@ -56,6 +61,7 @@ defmodule Justsend do
       preferentially_match(recipient, tail)
     end
   end
+
 
   def render_message(recipient, message) do
     Map.get(@renderers, message.type).(recipient, message)

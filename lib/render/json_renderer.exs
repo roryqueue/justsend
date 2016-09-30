@@ -1,4 +1,5 @@
 defmodule JsonRenderer do
+  import Poison, only: Parser
   @source_path '.'
 
   def render_from_file(send_type, send_mediums \\ [:email, :apn, :gcm, :sms, :browser_push])
@@ -24,7 +25,7 @@ defmodule JsonRenderer do
 
     json_data = find_most_shallow_match(json_file)
     |> File.read
-    # |> Poison.blah
+    |> Parser.parse!(keys: :atoms!)
     Enum.map(send_mediums, fn medium -> {medium: render_from_json(medium, json_data)} end)
 
   end

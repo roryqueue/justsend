@@ -16,13 +16,15 @@ defmodule Justsend do
     |> Stream.map(&Task.async(
       fn(recipient) ->
         message_to(recipient, message)
-      end
+      end,
+      &1
     ))
     |> Enum.reduce(&Task.await(
       fn(send_result) ->
         # some sort of summary statistics here
         send_result
-      end
+      end,
+      &1
     ))
   end
 

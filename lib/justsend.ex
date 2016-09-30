@@ -19,9 +19,9 @@ defmodule Justsend do
       end
     ))
     |> Enum.reduce(&Task.await(
-      fn(send) ->
+      fn(send_result) ->
         # some sort of summary statistics here
-        send
+        send_result
       end
     ))
   end

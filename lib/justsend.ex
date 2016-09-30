@@ -13,11 +13,17 @@ defmodule Justsend do
 
   def message_to(recipients, message) when is_list(recipients) do
     recipients
-    |> Stream.map(
+    |> Stream.map(&Task.async(
       fn(recipient) ->
         message_to(recipient, message)
       end
-    )
+    ))
+    |> Enum.reduce(&Task.await(
+      fn(send) ->
+        # some sort of summary statistics here
+        send
+      end
+    ))
   end
 
   def message_to(recipient, message) when is_bitstring(recipient) do
